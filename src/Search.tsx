@@ -8,6 +8,7 @@ import styles from './component.module.css';
 function Search() {
     const [loading, setLoading] = useState(false);
     const [searchInput, setSearchInput] = useState("");
+    const [debouncedValue, setDebouncedValue] = useState("");
     const [products, setProducts] = useState<IProduct[] | undefined>(undefined);
     const [responseError, setResponseError] = useState("");
 
@@ -15,14 +16,24 @@ function Search() {
         setSearchInput(inputValue);
     }
 
+    useEffect(() => {
+        const debounceHandler = setTimeout(() => {
+            setDebouncedValue(searchInput);
+        }, 500);
+
+        return () => {
+            clearTimeout(debounceHandler);
+        }
+    }, [searchInput]);
+
 
 
 
     useEffect(() => {
-        if (searchInput) {
+        if (debouncedValue) {
             (async() => {
                 setLoading(true);
-                const responseData = await fetchProducts(searchInput);
+                const responseData = await fetchProducts(debouncedValue);
                 if (responseData.products) {
                     setProducts(responseData.products);
                 } else {
@@ -32,7 +43,7 @@ function Search() {
                 setLoading(false);
             })();
         }
-    }, [searchInput])
+    }, [debouncedValue])
 
     return (
         <>
