@@ -3,31 +3,15 @@ import {fetchProducts} from './request.ts';
 import ProductCard from './ProductCard.tsx';
 import type {IProduct} from './types.ts';
 import styles from './component.module.css';
+import { useDebouncer } from './useDebouncer.ts';
 
 
 function Search() {
     const [loading, setLoading] = useState(false);
     const [searchInput, setSearchInput] = useState("");
-    const [debouncedValue, setDebouncedValue] = useState("");
     const [products, setProducts] = useState<IProduct[] | undefined>(undefined);
     const [responseError, setResponseError] = useState("");
-
-    function updateSearchInput(inputValue: string) {
-        setSearchInput(inputValue);
-    }
-
-    useEffect(() => {
-        const debounceHandler = setTimeout(() => {
-            setDebouncedValue(searchInput);
-        }, 500);
-
-        return () => {
-            clearTimeout(debounceHandler);
-        }
-    }, [searchInput]);
-
-
-
+    const debouncedValue = useDebouncer(searchInput);
 
     useEffect(() => {
         if (debouncedValue) {
@@ -52,7 +36,7 @@ function Search() {
                     type={'search'}
                     placeholder={'Search your product...'}
                     value={searchInput}
-                    onInput={(event: FormEvent<HTMLInputElement>) => updateSearchInput(event.target.value)}
+                    onInput={(event: FormEvent<HTMLInputElement>) => setSearchInput(event.target.value)}
                 />
             </div>
 
