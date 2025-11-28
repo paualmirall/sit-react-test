@@ -33,7 +33,7 @@ We will be using a **Vite + React** project.
 
 ### Phase 2: Optimization and Robustness (Approx. 20 min)
 
-**Goal:** Identify and solve the problems from Phase 1.
+**Goal:** Identify and implement solutions for solving the problems from Phase 1.
 
 **Context:** Our current implementation is functional, but it has performance issues and potential concurrency bugs.
 
